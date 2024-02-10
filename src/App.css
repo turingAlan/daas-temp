@@ -1,0 +1,26 @@
+#root {
+  max-width: 1280px;
+  display: block;
+  min-width: 100%;
+  padding-inline: 1rem;
+
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+}
+
+.data-card{
+  box-shadow: 0px 10px 16px 0px rgba(0, 35, 83, 0.05);
+  overflow-y: scroll;
+  border-radius: 1rem;
+
+}
+
+.bg-pattern {
+  background-image: url(/images/square.svg);
+  background-size: calc(20px + .7vw);
+  background-repeat: repeat;
+  -webkit-mask-image: linear-gradient(to top, white , transparent);
+  mask-image: linear-gradient(to top, white , transparent);
+}
