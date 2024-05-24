@@ -1,55 +1,66 @@
-import dayjs from 'dayjs'
-import ReactEcharts from 'echarts-for-react'
+import dayjs from "dayjs";
+import ReactEcharts from "echarts-for-react";
 
-const Chart = ({ chartData ,timeFrame}) => {
+const Chart = ({ chartData, timeFrame }) => {
+  console.log(chartData);
+
+  const {
+    yLabel,
+    subYLabel,
+    yDataSet,
+    subYDataSet,
+    yLabelFormatter,
+    subYLabelFormatter,
+    xDataSet,
+    xDataType,
+  } = chartData;
 
   const yData = {
     scales: [
       {
-        name: 'Total Orders',
-        type: 'bar',
-        tooltip: {
-          valueFormatter: function (value) {
-            return value
-          },
-        },
+        name: yLabel,
+        type: "bar",
         itemStyle: {
           emphasis: {
             barBorderRadius: [20, 20],
           },
           normal: {
             barBorderRadius: [20, 20, 0, 0],
-            color:"#fac859"
+            color: "#fac859",
           },
         },
-        data: chartData.totalOrders,
+        data: yDataSet,
+        tooltip: {
+          valueFormatter: function (value) {
+            return `${yLabelFormatter?.prefix}${value}${yLabelFormatter?.suffix}`;
+          },
+        },
       },
       {
-        name: 'Avg. value',
-        type: 'line',
+        name: subYLabel,
+        type: "line",
         yAxisIndex: 1,
         tooltip: {
           valueFormatter: function (value) {
-            return '₹ ' + value
+            return `${subYLabelFormatter?.prefix}${value}${subYLabelFormatter?.suffix}`;
           },
         },
-        data: chartData.avgAmount,
+        data: subYDataSet,
       },
     ],
     axisData: [
       {
         axisLabel: {
-          formatter: '{value}',
+          formatter: `${yLabelFormatter?.prefix}{value}${yLabelFormatter?.suffix}`,
         },
       },
       {
         axisLabel: {
-          formatter: '₹ {value}',
+          formatter: `${subYLabelFormatter?.prefix}{value}${subYLabelFormatter?.suffix}`,
         },
       },
     ],
-  }
-
+  };
 
   // option = {
   //   title: {
@@ -68,7 +79,7 @@ const Chart = ({ chartData ,timeFrame}) => {
   //   },
   //   xAxis: {
   //     type: 'category',
-  //     data: xData,     
+  //     data: xData,
   //   },
   //   yAxis: {
   //     type: 'value'
@@ -78,38 +89,41 @@ const Chart = ({ chartData ,timeFrame}) => {
 
   const option = {
     tooltip: {
-      trigger: 'axis',
-     
-      backgroundColor: 'rgba(0,0,0,0.95)',
+      trigger: "axis",
+
+      backgroundColor: "rgba(0,0,0,0.95)",
       textStyle: {
-        color: 'white'
+        color: "white",
       },
-      valueFormatter: (value) =>{ '$' + value.toFixed(2)
-    console.log(value,"hello")
-    }
-    
+      valueFormatter: (value) => {
+        "$" + value.toFixed(2);
+      },
     },
 
     xAxis: {
       scale: true,
       show: true,
       onZero: false,
-      min: 'dataMin',
-      axisLabel:{
+      min: "dataMin",
+      axisLabel: {
         formatter: function (value) {
-          if(timeFrame.toLowerCase() === "hourly"){
-            return new Date(value).getHours() + ":00"
-        }else if(timeFrame.toLowerCase() === "daily"){
-          return dayjs(value).format("DD-MMM")
-      }else if(timeFrame.toLowerCase() === "weekly"){
-          return dayjs(value).format("DD-MMM")
-        }else if(timeFrame.toLowerCase() === "monthly"){
-          return dayjs(value).format("MMM-YYYY")
-        }else if(timeFrame.toLowerCase() === "yearly"){
-          return dayjs(value).format("YYYY")
-        }
-
-    }},
+          if (xDataType === "time") {
+            if (timeFrame.toLowerCase() === "hourly") {
+              return new Date(value).getHours() + ":00";
+            } else if (timeFrame.toLowerCase() === "daily") {
+              return dayjs(value).format("DD-MMM");
+            } else if (timeFrame.toLowerCase() === "weekly") {
+              return dayjs(value).format("DD-MMM");
+            } else if (timeFrame.toLowerCase() === "monthly") {
+              return dayjs(value).format("MMM-YYYY");
+            } else if (timeFrame.toLowerCase() === "yearly") {
+              return dayjs(value).format("YYYY");
+            }
+          } else {
+            return value;
+          }
+        },
+      },
 
       axisLine: {
         show: false,
@@ -119,8 +133,8 @@ const Chart = ({ chartData ,timeFrame}) => {
       minorTick: {
         show: false,
       },
-      type: 'category',
-      data: chartData.xData,
+      type: "category",
+      data: xDataSet,
       axisTick: {
         show: false,
       },
@@ -129,27 +143,27 @@ const Chart = ({ chartData ,timeFrame}) => {
       return {
         ...axisData,
         alignTicks: true,
-        type: 'value',
+        type: "value",
         scale: true,
         axisLine: {
           onZero: 0,
         },
         splitLine: {
           lineStyle: {
-            color: 'black',
-            opacity: '0.1',
-            type: 'dashed',
+            color: "black",
+            opacity: "0.1",
+            type: "dashed",
           },
         },
-      }
+      };
     }),
     axisPointer: {
       lineStyle: {
         width: 2,
-        color: '#91cb74',
-        type: 'dashed',
+        color: "#91cb74",
+        type: "dashed",
         opacity: 0.6,
-        cap: 'round',
+        cap: "round",
       },
     },
     series: yData.scales.map((axisData) => {
@@ -157,17 +171,21 @@ const Chart = ({ chartData ,timeFrame}) => {
         ...axisData,
         lineStyle: {
           normal: {
-            color: '#3881e6',
+            color: "#3881e6",
             width: 3,
           },
         },
-      }
+      };
     }),
-  }
+  };
 
   return (
-    <ReactEcharts option={option} style={{ width: '100%', height: '100%' }} theme={"my_theme"} />
-  )
-}
+    <ReactEcharts
+      option={option}
+      style={{ width: "100%", height: "100%" }}
+      theme={"my_theme"}
+    />
+  );
+};
 
-export default Chart
+export default Chart;

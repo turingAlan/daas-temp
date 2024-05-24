@@ -1,12 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
 
-body{
+body {
   background-color: rgb(32, 32, 32);
   color: white;
   font-family: Lato, sans-serif;
@@ -29,7 +27,7 @@ body{
   background: #555;
 }
 
-.popup{
+.popup {
   position: absolute;
   text-align: center;
   top: 50%;
@@ -41,7 +39,7 @@ body{
   border: 1px solid black;
 }
 
-.backdrop{
+.backdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -50,4 +48,54 @@ body{
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 4;
 }
- 
+
+.circle {
+  width: 200px;
+  height: 200px;
+  background: #ccc;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.wave {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--wave-color, #4973ff);
+  border-radius: 50%;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.wave:before,
+.wave:after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: var(--wave-top, 0);
+  left: 50%;
+  transform: translate(-50%, -100%);
+  background: #000;
+}
+
+.wave:before {
+  border-radius: 47%;
+  background: rgba(255, 255, 255, 0.7);
+  animation: animate 5s linear infinite;
+}
+
+.wave:after {
+  border-radius: 45%;
+  background: rgba(255, 255, 255, 0.5);
+  animation: animate 10s linear infinite;
+}
+
+@keyframes animate {
+  0% {
+    transform: translate(-50%, -75%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -75%) rotate(360deg);
+  }
+}
